@@ -1,0 +1,1 @@
+ALTER TABLE `workflows` ADD `evaluation` text DEFAULT '{}' NOT NULL;

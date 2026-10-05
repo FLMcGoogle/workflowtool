@@ -1,0 +1,1 @@
+CREATE INDEX `idx_workflows_owner_updated` ON `workflows` (`owner_id`,`updated_at`);
