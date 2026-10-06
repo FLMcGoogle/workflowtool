@@ -66,7 +66,19 @@ function fresh(setting: Setting, workflowType: string, projectId?: number): Work
 }
 
 function normalize(workflow: Workflow): Workflow {
-  return { ...workflow, evaluation: workflow.evaluation || blankEvaluation(), nodes: workflow.nodes.map((node) => ({ ...node, shape: node.shape === ("issue" as Shape) ? "note" : node.shape })) };
+  const defaults = blankEvaluation();
+  const savedEvaluation = workflow.evaluation || defaults;
+  return {
+    ...workflow,
+    evaluation: {
+      ...defaults,
+      ...savedEvaluation,
+      scores: savedEvaluation.scores && typeof savedEvaluation.scores === "object" ? savedEvaluation.scores : {},
+      tradeoffs: Array.isArray(savedEvaluation.tradeoffs) ? savedEvaluation.tradeoffs : [],
+      actions: Array.isArray(savedEvaluation.actions) ? savedEvaluation.actions : [],
+    },
+    nodes: workflow.nodes.map((node) => ({ ...node, shape: node.shape === ("issue" as Shape) ? "note" : node.shape })),
+  };
 }
 
 function ToolbarIcon({ shape }: { shape: Shape }) {
